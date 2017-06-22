@@ -13,13 +13,24 @@ fi
 cd "$1"
 
 echo "Compiling..."
-g++ -Wall -std=c++11 ./*.cpp -o x.elf
+OUT_LOG="log.txt"
+touch $OUT_LOG
+g++ -Wall -std=c++11 ./*.cpp -o x.elf |& tee $OUT_LOG
 
-fname="input.txt"
-echo "Testing..."
+errs=$(grep error $OUT_LOG)   # Find the word error in compiler output
 
-# Run the program
-./x.elf < $fname
+# Check if the length of the string is greater than 1
+if [[ ${#errs} -ge 1 ]];then
+    echo "---------------------"
+    echo "$errs"
+    echo "Compilation failed..."
+else
+    fname="input.txt"
+    echo "Testing..."
+    
+    # Run the program
+    ./x.elf < $fname
+fi
 
 {
     cd -
