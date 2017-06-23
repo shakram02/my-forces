@@ -61,7 +61,7 @@ int get_cut_count(int cut, int length, vector<int> &valid_cuts, CutMap &memo)
     }
     else if (cut == 0 || length <= 0)
     {
-        result = 0;
+        return -1; // Don't register invalid entries in table
     }
     else if (cut == length)
     {
