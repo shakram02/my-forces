@@ -64,5 +64,8 @@ int main()
         cout << *i << ' ';
     cout << endl;
 
+    vector<int> vec;
+    sort(vec.begin(), vec.end(), greater<int>());
+
     return 0;
 }

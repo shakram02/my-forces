@@ -11,8 +11,6 @@ BoundMap memo;
 /* ##### */
 template <class T>
 void read_vec(vector<T> &in_vec);
-template <class T>
-void print_vec(vector<T> &in_vec);
 /* ##### */
 
 int get_count(vector<int> &samples, int start, int end);
@@ -34,10 +32,6 @@ int main()
     {
         for (int c_start = start; c_start <= end; c_start++)
         {
-            // if (c_start > c_end || c_end < c_start)
-            // {
-            //     continue;
-            // }
             int ones_in_range = get_count(samples, c_start, c_end) + ones_outside_range(samples, c_start, c_end);
 #ifndef ONLINE_JUDGE
             cout << "[" << c_start << " " << c_end << "]:" << ones_in_range << endl;
@@ -75,11 +69,9 @@ int get_count(vector<int> &samples, int start, int end)
     }
 
 #ifndef ONLINE_JUDGE
-    if (start <= end)
-    {
-        cout << "Set [" << start << "] [" << end << "] ->" << result << endl;
-    }
+    cout << "Set [" << start << "] [" << end << "] ->" << result << endl;
 #endif
+
     memo[start][end] = result;
     return result;
 }
@@ -104,10 +96,6 @@ int ones_outside_range(vector<int> &samples, int start, int end)
         }
     }
 
-#ifndef ONLINE_JUDGE
-// cout << "Outsiders [" << start << " " << end << "] : " << ones << endl;
-#endif
-
     return ones;
 }
 
@@ -120,14 +108,4 @@ void read_vec(vector<T> &in_vec)
     {
         in_vec.push_back(buff);
     }
-}
-
-template <class T>
-void print_vec(vector<T> &in_vec)
-{
-    for (const auto &x : in_vec)
-    {
-        cout << x << " ";
-    }
-    cout << endl;
 }
