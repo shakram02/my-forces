@@ -39,6 +39,16 @@ void read_vec(vector<T> &in_vec)
     }
 }
 
+template <class T>
+void print_vec(vector<T> &in_vec)
+{
+    for (const auto &x : in_vec)
+    {
+        cout << x << " ";
+    }
+    cout << endl;
+}
+
 int to_int(string s)
 {
     return stod(s);
