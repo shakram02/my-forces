@@ -40,6 +40,18 @@ void read_vec(vector<T> &in_vec)
 }
 
 template <class T>
+void read_vec_len(vector<T> &in_vec, std::size_t len)
+{
+    T buff;
+
+    for (int i = 0; i < len; i++)
+    {
+        cin >> buff;
+        in_vec.push_back(buff);
+    }
+}
+
+template <class T>
 void print_vec(vector<T> &in_vec)
 {
     for (const auto &x : in_vec)
