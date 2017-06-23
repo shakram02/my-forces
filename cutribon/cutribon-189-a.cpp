@@ -3,81 +3,98 @@
 #include <algorithm>
 #include <vector>
 #include <map>
+#include <cstring>
 using namespace std;
-typedef map<int, int> CutMap;
+
+// Length -> [cut length -> validity]
+typedef map<int, map<int, int>> CutMap;
 
 CutMap cut_map;
+int has_valid_cut(int cut_index, int length, vector<int> &valid_cuts, CutMap &memo);
+int rope_length;
 
-void build_up(int, int, vector<int> &);
-int has_valid_cut(int x, int length, vector<int> &valid_cuts);
-
-int n;
-int **valid_cuttings; // All possible lengths * all possible cuts
-
+const int NUM_CUTS = 3;
 int main()
 {
 
     vector<int> cuts;
-    cin >> n;
+    cin >> rope_length;
 
-    valid_cuttings = (int **)calloc((n + 1) * 3, sizeof(char));
+    CutMap memo;
 
     int buff;
     while (cin >> buff)
         cuts.push_back(buff);
 
+    int count = 0;
     sort(cuts.begin(), cuts.end());
-    int result = 0;
 
 #ifndef ONLINE_JUDGE
-    cout << n << " " << cuts[0] << " " << cuts[1] << " " << cuts[2] << endl;
+    cout << rope_length << " " << cuts[0] << " " << cuts[1] << " " << cuts[2] << endl;
 #endif
 
-    cout << (has_valid_cut(6, 7, cuts) ? "Can do" : "No way") << endl;
+    for (int i = 0; i < NUM_CUTS; i++)
+    {
+        int will_cut = 0;
+
+        while ((will_cut = has_valid_cut(cuts[i], rope_length, cuts, memo)))
+        {
+            count++;
+            rope_length -= cuts[i];
+#ifndef ONLINE_JUDGE
+            cout << "Cut [" << cuts[i] << "]" << endl;
+#endif
+        }
+    }
+
+    cout << count << endl;
     return 0;
 }
 
-void build_up(int cut, int length, vector<int> &valid_cuts)
+int has_valid_cut(int cut, int length, vector<int> &valid_cuts, CutMap &memo)
 {
-    int cuts = 0;
-    int index = 0;
-    int try_cut = valid_cuts[index];
-}
-
-int best_cuts(int length, vector<int> &valid_cuts)
-{
-    int cut_index = 0;
-    int cut = valid_cuts[cut_index];
-
-    while (1)
+    int result = -1;
+    if (memo.count(length) && memo[length].count(cut))
     {
+        result = memo[length][cut];
     }
-    return 0;
-}
-
-int has_valid_cut(int x, int length, vector<int> &valid_cuts)
-{
-    if (valid_cuttings[length][x] != -1)
+    else if (cut == 0 || length <= 0)
     {
-        return valid_cuttings[length][x];
+        result = 0;
+    }
+    else if (cut == length)
+    {
+        result = 1;
+    }
+    else if (cut > length)
+    {
+        result = 0;
+    }
+    else
+    {
+        // length > cut
+        for (const int &c : valid_cuts)
+        {
+            // Get all possible values of other cuts
+            int len_after_cut = length - cut;
+            int temp = has_valid_cut(c, len_after_cut, valid_cuts, memo);
+            memo[len_after_cut][c] = temp;
+
+            if (temp)
+            {
+                result = 1;
+            }
+        }
+
+        // No sub-solution found
+        if (result == -1)
+        {
+            result = 0;
+        }
     }
 
-    if (length - x == 0)
-    {
-        valid_cuttings[length][x] = 1;
-        return true;
-    }
-    else if (length - x < 0)
-    {
-        valid_cuttings[length][x] = 0;
-        return false;
-    }
-
-    for (const int &c : valid_cuts)
-    {
-        // Fill all the table
-        has_valid_cut(c, length - x, valid_cuts);
-    }
-
-    return valid_cuttings[length][x];
+#ifndef ONLINE_JUDGE
+    cout << " [" << cut << "] cuts [" << length << "] -> " << result << endl;
+#endif
+    return result;
 }
