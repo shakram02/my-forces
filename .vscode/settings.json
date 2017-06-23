@@ -7,6 +7,7 @@
         "unordered_set": "cpp",
         "set": "cpp",
         "ostream": "cpp",
-        "regex": "cpp"
+        "regex": "cpp",
+        "functional": "cpp"
     }
 }

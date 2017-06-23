@@ -9,8 +9,10 @@ using namespace std;
 // Length -> [cut length -> validity]
 typedef map<int, map<int, int>> CutMap;
 
+int get_cut_count(int cut_index, int length, vector<int> &valid_cuts, CutMap &memo);
+int max_cuts_at(int length, CutMap &memo);
+
 CutMap cut_map;
-int has_valid_cut(int cut_index, int length, vector<int> &valid_cuts, CutMap &memo);
 int rope_length;
 
 const int NUM_CUTS = 3;
@@ -35,15 +37,14 @@ int main()
 
     for (int i = 0; i < NUM_CUTS; i++)
     {
-        int will_cut = 0;
+        int temp_rope_length = rope_length;
+        int temp_cut_count = 0;
 
-        while ((will_cut = has_valid_cut(cuts[i], rope_length, cuts, memo)))
+        temp_cut_count = get_cut_count(cuts[i], temp_rope_length, cuts, memo);
+
+        if (temp_cut_count > count)
         {
-            count++;
-            rope_length -= cuts[i];
-#ifndef ONLINE_JUDGE
-            cout << "Cut [" << cuts[i] << "]" << endl;
-#endif
+            count = temp_cut_count;
         }
     }
 
@@ -51,7 +52,7 @@ int main()
     return 0;
 }
 
-int has_valid_cut(int cut, int length, vector<int> &valid_cuts, CutMap &memo)
+int get_cut_count(int cut, int length, vector<int> &valid_cuts, CutMap &memo)
 {
     int result = -1;
     if (memo.count(length) && memo[length].count(cut))
@@ -72,29 +73,50 @@ int has_valid_cut(int cut, int length, vector<int> &valid_cuts, CutMap &memo)
     }
     else
     {
+        int max_cuts = 0;
         // length > cut
-        for (const int &c : valid_cuts)
+        for (unsigned int i = 0; i < valid_cuts.size(); i++)
         {
+            int c = valid_cuts[i];
             // Get all possible values of other cuts
             int len_after_cut = length - cut;
-            int temp = has_valid_cut(c, len_after_cut, valid_cuts, memo);
-            memo[len_after_cut][c] = temp;
+            int temp = get_cut_count(c, len_after_cut, valid_cuts, memo);
 
             if (temp)
             {
-                result = 1;
+                // Find the max subcuts
+                max_cuts = max(max_cuts_at(len_after_cut, memo) + 1, temp);
+#ifndef ONLINE_JUDGE
+                cout << " {" << max_cuts_at(len_after_cut, memo) + 1 << "} ? {" << temp << "}" << endl;
+#endif
             }
         }
 
-        // No sub-solution found
-        if (result == -1)
-        {
-            result = 0;
-        }
+        result = max_cuts;
     }
 
 #ifndef ONLINE_JUDGE
-    cout << " [" << cut << "] cuts [" << length << "] -> " << result << endl;
+    if (result != 0)
+    {
+        cout << " [" << cut << "] cuts [" << length << "] -> " << result << endl;
+    }
 #endif
+
+    memo[length][cut] = result;
     return result;
+}
+
+int max_cuts_at(int length, CutMap &memo)
+{
+    int max = 0;
+    for (const auto &cut_info : memo[length])
+    {
+        int number = cut_info.second;
+        if (number > max)
+        {
+            max = number;
+        }
+    }
+
+    return max;
 }
