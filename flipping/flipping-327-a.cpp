@@ -16,6 +16,7 @@ void print_vec(vector<T> &in_vec);
 /* ##### */
 
 int get_count(vector<int> &samples, int start, int end);
+int ones_outside_range(vector<int> &samples, int start, int end);
 int flip(int index, vector<int> samples);
 
 int main()
@@ -25,8 +26,10 @@ int main()
     vector<int> samples;
     read_vec(samples);
 
-    get_count(samples, 0, samples.size() - 1);
-
+    int start = 0;
+    int end = samples.size() - 1;
+    int ones_in_range = get_count(samples, start, end);
+    cout << "[" << start << " " << end << "]:" << ones_in_range << " + " << ones_outside_range(samples, start, end) << endl;
     return 0;
 }
 
@@ -50,11 +53,18 @@ int get_count(vector<int> &samples, int start, int end)
     else
     {
         int max_count = 0;
+        int selected_start = -1, selected_end = -1;
         for (int c_end = end; c_end >= start; c_end--)
         {
             for (int c_start = start; c_start < end; c_start++)
             {
-                max_count = max(flip(c_start, samples) + get_count(samples, c_start + 1, c_end), max_count);
+                int ones_in_range = flip(c_start, samples) + get_count(samples, c_start + 1, c_end);
+                if (ones_in_range > max_count)
+                {
+                    selected_start = c_start;
+                    selected_end = c_end;
+                    max_count = ones_in_range;
+                }
             }
         }
         result = max_count;
@@ -73,6 +83,28 @@ int get_count(vector<int> &samples, int start, int end)
 int flip(int index, vector<int> samples)
 {
     return 1 - samples[index];
+}
+
+int ones_outside_range(vector<int> &samples, int start, int end)
+{
+    int ones = 0;
+    for (int i = 0; i < (int)samples.size(); i++)
+    {
+        if (i >= start && i <= end)
+        {
+            continue;
+        }
+        if (samples[i])
+        {
+            ones++;
+        }
+    }
+
+#ifndef ONLINE_JUDGE
+// cout << "Outsiders [" << start << " " << end << "] : " << ones << endl;
+#endif
+
+    return ones;
 }
 
 template <class T>
