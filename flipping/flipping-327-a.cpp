@@ -28,8 +28,28 @@ int main()
 
     int start = 0;
     int end = samples.size() - 1;
-    int ones_in_range = get_count(samples, start, end);
-    cout << "[" << start << " " << end << "]:" << ones_in_range << " + " << ones_outside_range(samples, start, end) << endl;
+    int max_count = 0;
+
+    for (int c_end = end; c_end >= start; c_end--)
+    {
+        for (int c_start = start; c_start <= end; c_start++)
+        {
+            // if (c_start > c_end || c_end < c_start)
+            // {
+            //     continue;
+            // }
+            int ones_in_range = get_count(samples, c_start, c_end) + ones_outside_range(samples, c_start, c_end);
+#ifndef ONLINE_JUDGE
+            cout << "[" << c_start << " " << c_end << "]:" << ones_in_range << endl;
+#endif
+            if (ones_in_range > max_count)
+            {
+                max_count = ones_in_range;
+            }
+        }
+    }
+    cout << max_count << endl;
+
     return 0;
 }
 
@@ -40,7 +60,6 @@ int get_count(vector<int> &samples, int start, int end)
     if (memo.count(start) && memo[start].count(end))
     {
         result = memo[start][end];
-        return result;
     }
     else if (start == end)
     {
@@ -48,26 +67,11 @@ int get_count(vector<int> &samples, int start, int end)
     }
     else if (start <= -1 || end >= (int)samples.size() || start > end || end < start)
     {
-        result = 0; // Invalid bounds
+        return -1; // Invalid bounds, don't register invalid entries in table
     }
     else
     {
-        int max_count = 0;
-        int selected_start = -1, selected_end = -1;
-        for (int c_end = end; c_end >= start; c_end--)
-        {
-            for (int c_start = start; c_start < end; c_start++)
-            {
-                int ones_in_range = flip(c_start, samples) + get_count(samples, c_start + 1, c_end);
-                if (ones_in_range > max_count)
-                {
-                    selected_start = c_start;
-                    selected_end = c_end;
-                    max_count = ones_in_range;
-                }
-            }
-        }
-        result = max_count;
+        result = flip(start, samples) + get_count(samples, start + 1, end);
     }
 
 #ifndef ONLINE_JUDGE
