@@ -20,16 +20,15 @@ void read_vec(vector<T> &in_vec, int len)
 int find_pile(int worm_label, int start_idx, int end_idx, const vector<int> &pile_info);
 int in_pile(int worm, int pile_index, const vector<int> &pile_info);
 void convert_pile_info(vector<int> &pile_info);
-bool strictly_in_range(int target, int start, int end, const vector<int> &field);
 
 int main()
 {
     int num_piles;
-    cin >> num_piles; // Ignore the number of piles
+    cin >> num_piles;
     vector<int> pile_info;
     read_vec(pile_info, num_piles);
     int x;
-    cin >> x; // Ignore the number of worm labels
+    cin >> x;
     vector<int> labels;
     read_vec(labels, x);
     convert_pile_info(pile_info);
@@ -64,7 +63,7 @@ int find_pile(int worm_label, int start_idx, int end_idx, const vector<int> &pil
     switch (test_in_pile)
     {
     case 0:
-        return pivot_idx + 1; // FIXME: what about last pile?
+        return pivot_idx + 1;
     case 1:
         return find_pile(worm_label, pivot_idx, end_idx, pile_info);
     case -1:
