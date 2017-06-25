@@ -65,6 +65,47 @@ int to_int(string s)
 {
     return stod(s);
 }
+template <class T>
+void read_2d_vector(int rows, int cols, vector<vector<T>> &container)
+{
+    for (int i = 0; i < rows; i++)
+    {
+        for (int j = 0; j < cols; j++)
+        {
+            T x;
+            cin >> x;
+            container[i][j] = x;
+#ifndef ONLINE_JUDGE
+            cout << "[" << i << "][" << j << "] " << container[i][j] << endl;
+#endif
+        }
+    }
+}
+
+template <class T>
+bool check_neighbors(int r_idx, int c_idx, int rows, int cols, T &grid, vector<pair<int, int>> available)
+{
+    T val;
+    int start_row = (r_idx - 1 < 0) ? r_idx : r_idx - 1;
+    int end_row = (r_idx + 1 > rows) ? r_idx : r_idx + 1;
+
+    int start_col = (c_idx - 1 < 0) ? c_idx : c_idx - 1;
+    int end_col = (c_idx + 1 > cols) ? c_idx : c_idx + 1;
+
+    // See how many are alive
+    for (int i = start_row; i <= end_row; i++)
+    {
+        for (int j = start_col; j <= end_col; j++)
+        {
+            if (grid[i][j] == val)
+            {
+                available.push_back(make_pair(i, j));
+            }
+        }
+    }
+
+    return available.size() != 0;
+}
 
 int main()
 {
