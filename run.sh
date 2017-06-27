@@ -15,7 +15,7 @@ cd "$1"
 echo "Compiling..."
 OUT_LOG="log.txt"
 touch $OUT_LOG
-g++ -Wall -std=c++11 ./*.cpp -o x.elf |& tee $OUT_LOG
+g++ -g -Wall -std=c++11 ./*.cpp -o x.elf |& tee $OUT_LOG
 
 errs=$(grep error $OUT_LOG)   # Find the word error in compiler output
 
