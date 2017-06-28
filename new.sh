@@ -2,9 +2,15 @@
 if [ $# -ne 2 ];then
     echo "Invalid parameters"
     echo "usage new [probname] [probnum-div]"
-    return 255
+    exit -1
 fi
 
+if [ -d "$1" ];then
+    echo "Directory exists"
+    exit -1
+fi
+
+# Create the file template
 mkdir "$1"
 cd "$1"
 touch input.txt
@@ -22,6 +28,8 @@ int main()
     return 0;
 }
 EOT
+
+# Don't show the output of cd -
 {
     cd -
 }> /dev/null
