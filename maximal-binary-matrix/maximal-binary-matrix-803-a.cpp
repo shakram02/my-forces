@@ -50,26 +50,12 @@ int main()
         }
     }
 
-    if (k > 0)
-    {
-        cout << -1 << endl;
-        return 0;
-    }
+    // No need to check for k > 0 here as when building the matrix
+    // I can choose wheter to fan out ( -2 ) or walk on diagonal ( -1 )
+    // with having a move that consumes 1 step, I can generate all
+    // sequences
 
     print_mat(mat);
 
     return 0;
 }
-// 3 4
-// Output
-// 1 1 0
-// 1 1 0
-// 0 0 0
-
-// 5 10
-// Output
-// 1 1 1 1 1
-// 1 1 0 0 0
-// 1 0 0 0 0
-// 1 0 0 0 0
-// 1 0 0 0 0
