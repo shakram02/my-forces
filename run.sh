@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ $# -ne 1 ];then
+if [ $# -gt 2 ];then
     echo "Invalid parameters"
     return 255
 fi
@@ -28,8 +28,12 @@ else
     fname="input.txt"
     echo "Testing..."
     
-    # Run the program
-    ./x.elf < $fname
+    if [ "$2" == "d" ]; then
+        gdb -ex "set args -2 < $(pwd)/$fname" x.elf
+    else
+        # Run the program
+        ./x.elf < $fname
+    fi
 fi
 
 {
