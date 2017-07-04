@@ -107,6 +107,15 @@ bool check_neighbors(int r_idx, int c_idx, int rows, int cols, T &grid, vector<p
     return available.size() != 0;
 }
 
+void iterate_map(map<int, int> m)
+{
+    for (auto it = m.begin(); it != m.end(); ++it)
+    {
+        v.push_back(it->first);
+        cout << it->first << "\n";
+    }
+}
+
 int main()
 {
     vector<int> nums;
@@ -119,6 +128,9 @@ int main()
 
     vector<int> vec;
     sort(vec.begin(), vec.end(), greater<int>());
+
+    // 2D vector 5 * 10
+    vector<vector<int>> mat(5, vector<int>(10, 0));
 
     return 0;
 }
