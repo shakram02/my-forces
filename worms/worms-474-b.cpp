@@ -2,7 +2,6 @@
 #include <string>
 #include <vector>
 #include <iomanip>
-#include <map>
 using namespace std;
 
 template <class T>
