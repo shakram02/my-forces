@@ -82,29 +82,26 @@ void read_2d_vector(int rows, int cols, vector<vector<T>> &container)
     }
 }
 
-template <class T>
-bool check_neighbors(int r_idx, int c_idx, int rows, int cols, T &grid, vector<pair<int, int>> available)
+void get_neighbours(int r_idx, int c_idx, vector<pair<int, int>> &n)
 {
-    T val;
     int start_row = (r_idx - 1 < 0) ? r_idx : r_idx - 1;
-    int end_row = (r_idx + 1 > rows) ? r_idx : r_idx + 1;
+    int end_row = (r_idx + 1 >= rows) ? r_idx : r_idx + 1;
 
     int start_col = (c_idx - 1 < 0) ? c_idx : c_idx - 1;
-    int end_col = (c_idx + 1 > cols) ? c_idx : c_idx + 1;
+    int end_col = (c_idx + 1 >= count) ? c_idx : c_idx + 1;
 
-    // See how many are alive
     for (int i = start_row; i <= end_row; i++)
     {
         for (int j = start_col; j <= end_col; j++)
         {
-            if (grid[i][j] == val)
+            if (i == r_idx && j == c_idx)
             {
-                available.push_back(make_pair(i, j));
+                // Don't add self
+                continue;
             }
+            n.push_back(make_pair(i, j));
         }
     }
-
-    return available.size() != 0;
 }
 
 void iterate_map(map<int, int> m)
