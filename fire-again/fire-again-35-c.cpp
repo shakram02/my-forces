@@ -54,11 +54,10 @@ int main()
     last_point = *start_points.begin(); // Base case
     set<point_t> to_visit;
 
+    // Burn the first generation (start points), then the second (to_visit), ...etc
     while (!start_points.empty())
     {
         point_t pivot = get_first(start_points);
-        set<point_t> n;
-        get_near(pivot, n);
 
         if (forest[pivot.first][pivot.second])
         {
@@ -68,11 +67,14 @@ int main()
 
 #ifndef ONLINE_JUDGE
         cout << "Burning: " << pivot.first + 1 << "," << pivot.second + 1 << endl;
-        print(n);
+        // print(n);
 #endif
 
+        set<point_t> n;
+        get_near(pivot, n);
         forest[pivot.first][pivot.second] = 1;
         last_point = pivot;
+
         for (auto const &p : n)
         {
             if (forest[p.first][p.second])
@@ -101,18 +103,6 @@ int main()
 
     cout << last_point.first + 1 << " " << last_point.second + 1 << endl;
     return 0;
-}
-
-bool are_all_burnt(vector<pair<int, int>> &o)
-{
-    for (auto const &x : o)
-    {
-        if (forest[x.first][x.second] == 0)
-        {
-            return false;
-        }
-    }
-    return true;
 }
 
 void get_near(pair<int, int> p, set<pair<int, int>> &n)
