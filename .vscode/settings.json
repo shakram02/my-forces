@@ -35,6 +35,8 @@
         "typeinfo": "cpp",
         "utility": "cpp",
         "string": "cpp",
-        "iomanip": "cpp"
+        "iomanip": "cpp",
+        "vector": "cpp",
+        "map": "cpp"
     }
 }
